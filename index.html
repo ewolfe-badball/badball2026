@@ -97,6 +97,29 @@
   .status-msg { font-family:'DM Mono',monospace; font-size:0.85rem; color:var(--gold); letter-spacing:2px; }
   .status-err { font-family:'DM Mono',monospace; font-size:0.8rem; color:var(--red); letter-spacing:1px; text-align:center; max-width:400px; line-height:1.6; }
 
+  /* PICKS MODAL */
+  .picks-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; display:flex; align-items:center; justify-content:center; padding:1rem; }
+  .picks-modal-overlay.hidden { display:none; }
+  .picks-modal { background:#0f0f1c; border:2px solid #f0c040; max-width:520px; width:100%; padding:2rem; position:relative; }
+  .picks-modal-title { font-family:'Orbitron',monospace; font-size:1.1rem; font-weight:900; color:#f0c040; letter-spacing:3px; text-align:center; margin-bottom:0.25rem; }
+  .picks-modal-team { font-family:'DM Mono',monospace; font-size:0.8rem; color:#ffffff; text-align:center; letter-spacing:1px; margin-bottom:1.5rem; }
+  .picks-modal-row { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; margin-bottom:0.5rem; background:#16162a; border-left:4px solid; }
+  .picks-modal-row.gold-row { border-color:#f0c040; }
+  .picks-modal-row.blue-row { border-color:#40a0e8; }
+  .picks-modal-row.green-row { border-color:#40e880; }
+  .picks-modal-label { font-family:'DM Mono',monospace; font-size:0.78rem; letter-spacing:1px; font-weight:600; }
+  .picks-modal-row.gold-row .picks-modal-label { color:#f0c040; }
+  .picks-modal-row.blue-row .picks-modal-label { color:#40a0e8; }
+  .picks-modal-row.green-row .picks-modal-label { color:#40e880; }
+  .picks-modal-num { font-family:'Orbitron',monospace; font-size:2rem; font-weight:900; }
+  .picks-modal-row.gold-row .picks-modal-num { color:#f0c040; text-shadow:0 0 12px rgba(240,192,64,0.6); }
+  .picks-modal-row.blue-row .picks-modal-num { color:#40a0e8; text-shadow:0 0 12px rgba(64,160,232,0.6); }
+  .picks-modal-row.green-row .picks-modal-num { color:#40e880; text-shadow:0 0 12px rgba(64,232,128,0.6); }
+  .picks-modal-send { display:block; width:100%; margin-top:1.5rem; padding:0.85rem; background:#f0c040; color:#080810; font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:3px; border:none; cursor:pointer; transition:all 0.2s; }
+  .picks-modal-send:hover { background:#ffda70; transform:translateY(-1px); }
+  .picks-modal-close { position:absolute; top:0.75rem; right:0.75rem; background:none; border:none; color:#60607a; font-family:'DM Mono',monospace; font-size:0.7rem; cursor:pointer; letter-spacing:1px; }
+  .picks-modal-close:hover { color:#ffffff; }
+
   /* DIRECTORY */
   .dir-ticker { background:var(--gold); color:var(--bg); padding:0.4rem 0; overflow:hidden; white-space:nowrap; font-family:'DM Mono',monospace; font-size:0.75rem; font-weight:500; letter-spacing:1px; }
   .dir-ticker-inner { display:inline-block; animation:scroll 40s linear infinite; }
@@ -143,6 +166,28 @@
 <body>
 
 <div class="confetti-wrap" id="confetti"></div>
+
+<!-- PICKS CONFIRMATION MODAL -->
+<div class="picks-modal-overlay hidden" id="picks-modal-overlay">
+  <div class="picks-modal">
+    <button class="picks-modal-close" onclick="closePicksModal()">✕ CLOSE</button>
+    <div class="picks-modal-title">🎉 YOUR PICKS ARE IN!</div>
+    <div class="picks-modal-team" id="modal-team-name"></div>
+    <div class="picks-modal-row gold-row">
+      <span class="picks-modal-label">💰 $8 LIGHTNING ROUND (Round 8)</span>
+      <span class="picks-modal-num" id="modal-p8">—</span>
+    </div>
+    <div class="picks-modal-row blue-row">
+      <span class="picks-modal-label">💵 $3 LIGHTNING ROUND (Round 13)</span>
+      <span class="picks-modal-num" id="modal-p3">—</span>
+    </div>
+    <div class="picks-modal-row green-row">
+      <span class="picks-modal-label">🐍 RESERVE ROUND SEED</span>
+      <span class="picks-modal-num" id="modal-snake">—</span>
+    </div>
+    <button class="picks-modal-send" id="modal-send-btn" onclick="modalSendEmail()">📧 SEND EMAIL TO ALL 14 TEAMS</button>
+  </div>
+</div>
 
 <!-- STATUS OVERLAY -->
 <div class="status-overlay hidden" id="status-overlay">
