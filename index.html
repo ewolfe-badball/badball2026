@@ -7,343 +7,159 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080810;
-    --surface: #0f0f1c;
-    --surface2: #16162a;
-    --gold: #f0c040;
-    --gold2: #ffda70;
-    --red: #e84040;
-    --blue: #40a0e8;
-    --green: #40e880;
-    --text: #e8e8f5;
-    --muted: #60607a;
-    --border: #22223a;
+    --bg: #080810; --surface: #0f0f1c; --surface2: #16162a;
+    --gold: #f0c040; --gold2: #ffda70; --red: #e84040;
+    --blue: #40a0e8; --green: #40e880; --text: #e8e8f5;
+    --muted: #60607a; --border: #22223a;
   }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .page { display:none; } .page.active { display:block; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-  }
+  .nav-btn { display:inline-block; padding:0.5rem 1.25rem; font-family:'DM Mono',monospace; font-size:0.78rem; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; background:transparent; border:2px solid var(--blue); color:var(--blue); white-space:nowrap; }
+  .nav-btn:hover { background:rgba(64,160,232,0.12); }
+  .nav-btn.gold-nav { border-color:var(--gold); color:var(--gold); }
+  .nav-btn.gold-nav:hover { background:rgba(240,192,64,0.12); }
 
-  /* ── PAGE SWITCHING ── */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* ── NAV BUTTON SHARED STYLE ── */
-  .nav-btn {
-    display: inline-block;
-    padding: 0.5rem 1.25rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: transparent;
-    border: 2px solid var(--blue);
-    color: var(--blue);
-    white-space: nowrap;
-  }
-  .nav-btn:hover { background: rgba(64,160,232,0.12); }
-  .nav-btn.gold-nav { border-color: var(--gold); color: var(--gold); }
-  .nav-btn.gold-nav:hover { background: rgba(240,192,64,0.12); }
-
-  /* ════════════════════════════════════════
-     RANDOMIZER PAGE
-  ════════════════════════════════════════ */
-  .header {
-    text-align: center;
-    padding: 2rem 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    background: radial-gradient(ellipse at top, rgba(240,192,64,0.08) 0%, transparent 60%);
-  }
-  .title-main {
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
-    font-size: clamp(1.6rem, 4vw, 3rem);
-    color: var(--gold);
-    letter-spacing: 6px;
-    text-shadow: 0 0 40px rgba(240,192,64,0.5), 0 0 80px rgba(240,192,64,0.2);
-    line-height: 1;
-  }
-  .title-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: #ffffff;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-top: 0.5rem;
-  }
-  .progress-banner {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0.75rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .prog-text { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
-  .prog-text strong { color: var(--gold); font-size: 1rem; }
-  .prog-bar-wrap { flex: 1; min-width: 120px; max-width: 300px; height: 6px; background: var(--border); }
-  .prog-bar-fill { height: 100%; background: var(--gold); transition: width 0.5s ease; box-shadow: 0 0 8px rgba(240,192,64,0.5); width: 0%; }
-  .reset-btn {
-    margin-left: auto;
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    padding: 0.35rem 0.9rem;
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: all 0.2s;
-  }
-  .reset-btn:hover { border-color: var(--red); color: var(--red); }
-  .main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
-  .instructions {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--gold);
-    padding: 1rem 1.25rem;
-    margin-bottom: 1.5rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    color: var(--muted);
-    line-height: 1.8;
-  }
-  .instructions strong { color: var(--text); }
-  .instructions .blue-text  { color: var(--blue);  font-weight: 600; }
-  .instructions .gold-text  { color: var(--gold);  font-weight: 600; }
-  .instructions .green-text { color: var(--green); font-weight: 600; }
-  .team-table { width: 100%; border-collapse: collapse; }
-  .team-table thead tr { background: var(--surface2); border-bottom: 2px solid var(--gold); }
-  .team-table th {
-    padding: 0.65rem 0.75rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 500;
-    text-align: left;
-  }
-  .th-team  { color: var(--text); }
-  .th-8     { color: var(--gold);  text-align: center; }
-  .th-3     { color: var(--blue);  text-align: center; }
-  .th-snake { color: var(--green); text-align: center; }
-  .th-act   { color: var(--muted); text-align: center; }
-  .team-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-  .team-table tbody tr:hover { background: rgba(255,255,255,0.02); }
-  .team-table tbody tr.done-row { background: rgba(240,192,64,0.03); }
-  .team-table td { padding: 0.7rem 0.75rem; vertical-align: middle; }
-  .td-num   { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); width: 28px; }
-  .td-name  { font-weight: 600; font-size: 0.9rem; line-height: 1.3; }
-  .td-owner { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-top: 0.15rem; }
-  .comm-badge {
-    display: inline-block;
-    background: var(--gold);
-    color: var(--bg);
-    font-size: 0.55rem;
-    padding: 0.1rem 0.4rem;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 1px;
-    vertical-align: middle;
-    margin-left: 0.4rem;
-    font-weight: 700;
-  }
-  .pick-cell { text-align: center; width: 70px; }
-  .pick-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px; height: 46px;
-    font-family: 'Orbitron', monospace;
-    font-weight: 700;
-    font-size: 1.2rem;
-    border: 2px solid var(--border);
-    color: var(--border);
-    background: var(--surface);
-  }
-  .pick-badge.show-gold  { border-color: var(--gold);  color: var(--gold);  background: rgba(240,192,64,0.08);  text-shadow: 0 0 10px rgba(240,192,64,0.5);  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-  .pick-badge.show-blue  { border-color: var(--blue);  color: var(--blue);  background: rgba(64,160,232,0.08);  text-shadow: 0 0 10px rgba(64,160,232,0.5);  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-  .pick-badge.show-green { border-color: var(--green); color: var(--green); background: rgba(64,232,128,0.08); text-shadow: 0 0 10px rgba(64,232,128,0.5); animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-  @keyframes popIn { 0% { transform: scale(0.2) rotate(-15deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
-  .act-cell { text-align: center; width: 260px; }
-  .btn-pair { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
-  .pick-btn {
-    padding: 0.5rem 0.85rem;
-    border: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.95rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.15s;
-    clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
-    white-space: nowrap;
-  }
-  .pick-btn.gold-btn  { background: var(--gold);  color: var(--bg); box-shadow: 0 2px 12px rgba(240,192,64,0.3); }
-  .pick-btn.gold-btn:hover:not(:disabled)  { background: var(--gold2); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(240,192,64,0.5); }
-  .pick-btn.green-btn { background: var(--green); color: var(--bg); box-shadow: 0 2px 12px rgba(64,232,128,0.3); }
-  .pick-btn.green-btn:hover:not(:disabled) { background: #70ffaa;    transform: translateY(-1px); box-shadow: 0 4px 20px rgba(64,232,128,0.5); }
-  .pick-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
-  .done-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--green); letter-spacing: 1px; }
-  .summary-panel { display: none; margin-top: 2rem; background: var(--surface); border: 2px solid var(--gold); padding: 1.5rem; }
-  .summary-panel.visible { display: block; animation: fadeIn 0.5s ease; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  /* RANDOMIZER */
+  .header { text-align:center; padding:2rem 1rem 1.5rem; border-bottom:1px solid var(--border); background:radial-gradient(ellipse at top,rgba(240,192,64,0.08) 0%,transparent 60%); }
+  .title-main { font-family:'Orbitron',monospace; font-weight:900; font-size:clamp(1.6rem,4vw,3rem); color:var(--gold); letter-spacing:6px; text-shadow:0 0 40px rgba(240,192,64,0.5),0 0 80px rgba(240,192,64,0.2); line-height:1; }
+  .title-sub { font-family:'DM Mono',monospace; font-size:0.75rem; color:#fff; letter-spacing:4px; text-transform:uppercase; margin-top:0.5rem; }
+  .progress-banner { background:var(--surface); border-bottom:1px solid var(--border); padding:0.75rem 1.5rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .prog-text { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--muted); white-space:nowrap; }
+  .prog-text strong { color:var(--gold); font-size:1rem; }
+  .prog-bar-wrap { flex:1; min-width:120px; max-width:300px; height:6px; background:var(--border); }
+  .prog-bar-fill { height:100%; background:var(--gold); transition:width 0.5s ease; box-shadow:0 0 8px rgba(240,192,64,0.5); width:0%; }
+  .reset-btn { margin-left:auto; background:none; border:1px solid var(--border); color:var(--muted); font-family:'DM Mono',monospace; font-size:0.7rem; padding:0.35rem 0.9rem; cursor:pointer; letter-spacing:1px; text-transform:uppercase; transition:all 0.2s; }
+  .reset-btn:hover { border-color:var(--red); color:var(--red); }
+  .main { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  .instructions { background:var(--surface2); border:1px solid var(--border); border-left:4px solid var(--gold); padding:1rem 1.25rem; margin-bottom:1.5rem; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:var(--muted); line-height:1.8; }
+  .instructions strong { color:var(--text); }
+  .instructions .blue-text  { color:var(--blue);  font-weight:600; }
+  .instructions .gold-text  { color:var(--gold);  font-weight:600; }
+  .instructions .green-text { color:var(--green); font-weight:600; }
+  .team-table { width:100%; border-collapse:collapse; }
+  .team-table thead tr { background:var(--surface2); border-bottom:2px solid var(--gold); }
+  .team-table th { padding:0.65rem 0.75rem; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; font-weight:500; text-align:left; }
+  .th-team{color:var(--text);} .th-8{color:var(--gold);text-align:center;} .th-3{color:var(--blue);text-align:center;} .th-snake{color:var(--green);text-align:center;} .th-act{color:var(--muted);text-align:center;}
+  .team-table tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
+  .team-table tbody tr:hover { background:rgba(255,255,255,0.02); }
+  .team-table tbody tr.done-row { background:rgba(240,192,64,0.03); }
+  .team-table td { padding:0.7rem 0.75rem; vertical-align:middle; }
+  .td-num { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--muted); width:28px; }
+  .td-name { font-weight:600; font-size:0.9rem; line-height:1.3; }
+  .td-owner { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--muted); margin-top:0.15rem; }
+  .comm-badge { display:inline-block; background:var(--gold); color:var(--bg); font-size:0.55rem; padding:0.1rem 0.4rem; font-family:'DM Mono',monospace; letter-spacing:1px; vertical-align:middle; margin-left:0.4rem; font-weight:700; }
+  .pick-cell { text-align:center; width:70px; }
+  .pick-badge { display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; font-family:'Orbitron',monospace; font-weight:700; font-size:1.2rem; border:2px solid var(--border); color:var(--border); background:var(--surface); }
+  .pick-badge.show-gold  { border-color:var(--gold);  color:var(--gold);  background:rgba(240,192,64,0.08);  text-shadow:0 0 10px rgba(240,192,64,0.5);  animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  .pick-badge.show-blue  { border-color:var(--blue);  color:var(--blue);  background:rgba(64,160,232,0.08);  text-shadow:0 0 10px rgba(64,160,232,0.5);  animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  .pick-badge.show-green { border-color:var(--green); color:var(--green); background:rgba(64,232,128,0.08); text-shadow:0 0 10px rgba(64,232,128,0.5); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { 0%{transform:scale(0.2) rotate(-15deg);opacity:0;} 100%{transform:scale(1) rotate(0deg);opacity:1;} }
+  .act-cell { text-align:center; width:260px; }
+  .btn-pair { display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap; }
+  .pick-btn { padding:0.5rem 0.85rem; border:none; font-family:'Bebas Neue',sans-serif; font-size:0.95rem; letter-spacing:2px; cursor:pointer; transition:all 0.15s; clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%); white-space:nowrap; }
+  .pick-btn.gold-btn  { background:var(--gold);  color:var(--bg); box-shadow:0 2px 12px rgba(240,192,64,0.3); }
+  .pick-btn.gold-btn:hover:not(:disabled)  { background:var(--gold2); transform:translateY(-1px); box-shadow:0 4px 20px rgba(240,192,64,0.5); }
+  .pick-btn.green-btn { background:var(--green); color:var(--bg); box-shadow:0 2px 12px rgba(64,232,128,0.3); }
+  .pick-btn.green-btn:hover:not(:disabled) { background:#70ffaa; transform:translateY(-1px); box-shadow:0 4px 20px rgba(64,232,128,0.5); }
+  .pick-btn:disabled { opacity:0.3; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+  .done-label { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--green); letter-spacing:1px; }
+  .summary-panel { display:none; margin-top:2rem; background:var(--surface); border:2px solid var(--gold); padding:1.5rem; }
+  .summary-panel.visible { display:block; animation:fadeIn 0.5s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
   .summary-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:4px; color:var(--gold); text-align:center; margin-bottom:0.25rem; }
   .summary-sub   { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); text-align:center; margin-bottom:1.5rem; }
   .summary-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem; }
-  .big-btn {
-    padding: 0.85rem 2rem;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    background: var(--gold);
-    color: var(--bg);
-    box-shadow: 0 4px 20px rgba(240,192,64,0.3);
-  }
-  .big-btn:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 6px 30px rgba(240,192,64,0.5); }
-  .snake-round-block { margin-bottom: 1rem; }
+  .big-btn { padding:0.85rem 2rem; font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:3px; border:none; cursor:pointer; transition:all 0.2s; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); background:var(--gold); color:var(--bg); box-shadow:0 4px 20px rgba(240,192,64,0.3); }
+  .big-btn:hover { background:var(--gold2); transform:translateY(-2px); box-shadow:0 6px 30px rgba(240,192,64,0.5); }
+  .snake-round-block { margin-bottom:1rem; }
   .snake-round-label { font-family:'Bebas Neue',sans-serif; font-size:0.85rem; letter-spacing:2px; padding:0.3rem 0.75rem; display:inline-block; margin-bottom:0.4rem; }
-  .snake-round-label.fwd { background: rgba(64,232,128,0.1); color: var(--green); border-left: 3px solid var(--green); }
-  .snake-round-label.rev { background: rgba(64,160,232,0.1); color: var(--blue);  border-left: 3px solid var(--blue); }
-  .snake-picks-row { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-  .snake-chip { background: var(--surface2); border: 1px solid var(--border); padding: 0.3rem 0.6rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; }
-  .chip-num     { font-weight: 700; }
-  .chip-num.fwd { color: var(--green); }
-  .chip-num.rev { color: var(--blue); }
+  .snake-round-label.fwd { background:rgba(64,232,128,0.1); color:var(--green); border-left:3px solid var(--green); }
+  .snake-round-label.rev { background:rgba(64,160,232,0.1); color:var(--blue);  border-left:3px solid var(--blue); }
+  .snake-picks-row { display:flex; flex-wrap:wrap; gap:0.3rem; }
+  .snake-chip { background:var(--surface2); border:1px solid var(--border); padding:0.3rem 0.6rem; font-family:'DM Mono',monospace; font-size:0.68rem; }
+  .chip-num{font-weight:700;} .chip-num.fwd{color:var(--green);} .chip-num.rev{color:var(--blue);}
   .confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:999; overflow:hidden; }
-  .confetti-piece { position:absolute; top:-10px; animation: cffall linear forwards; }
-  @keyframes cffall { to { transform: translateY(110vh) rotate(720deg); opacity:0; } }
+  .confetti-piece { position:absolute; top:-10px; animation:cffall linear forwards; }
+  @keyframes cffall { to{transform:translateY(110vh) rotate(720deg);opacity:0;} }
 
-  /* ════════════════════════════════════════
-     DIRECTORY PAGE
-  ════════════════════════════════════════ */
-  .dir-ticker {
-    background: var(--gold);
-    color: var(--bg);
-    padding: 0.4rem 0;
-    overflow: hidden;
-    white-space: nowrap;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 1px;
-  }
-  .dir-ticker-inner { display: inline-block; animation: scroll 40s linear infinite; }
-  @keyframes scroll { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
+  /* STATUS OVERLAY */
+  .status-overlay { position:fixed; inset:0; background:rgba(8,8,16,0.85); z-index:500; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem; }
+  .status-overlay.hidden { display:none; }
+  .status-spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg);} }
+  .status-msg { font-family:'DM Mono',monospace; font-size:0.85rem; color:var(--gold); letter-spacing:2px; }
+  .status-err { font-family:'DM Mono',monospace; font-size:0.8rem; color:var(--red); letter-spacing:1px; text-align:center; max-width:400px; line-height:1.6; }
 
-  .dir-header {
-    border-bottom: 2px solid var(--gold);
-    padding: 1.25rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg);
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-  .dir-logo { display: flex; align-items: baseline; gap: 0.6rem; }
-  .dir-logo-main { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--gold); letter-spacing: 4px; line-height: 1; }
-  .dir-logo-sub  { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
-  .dir-header-stats { display: flex; gap: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .dir-header-stats span { color: var(--gold); font-size: 1rem; display: block; }
-  .dir-toolbar {
-    padding: 1rem 2rem;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .dir-search {
-    flex: 1;
-    min-width: 220px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 0.6rem 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .dir-search:focus { border-color: var(--gold); }
-  .dir-search::placeholder { color: var(--muted); }
-  .dir-count { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
-  .dir-count strong { color: var(--gold); }
-  .dir-table-wrap { padding: 1.5rem 2rem; overflow-x: auto; }
-  .dir-table { width: 100%; border-collapse: collapse; min-width: 1200px; }
-  .dir-table thead tr { background: var(--surface2); border-bottom: 2px solid var(--gold); }
-  .dir-table th {
-    padding: 0.65rem 0.85rem;
-    text-align: left;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .dth-num   { color: var(--muted); width: 32px; }
-  .dth-team  { color: var(--gold); }
-  .dth-owner { color: var(--gold); }
-  .dth-phone { color: var(--gold); }
-  .dth-email { color: var(--blue); }
-  .dth-gm    { color: var(--green); }
-  .dth-gme   { color: var(--blue); }
-  .dir-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-  .dir-table tbody tr:hover { background: var(--surface); }
-  .dir-table tbody tr.comm-row { border-left: 3px solid var(--red); }
-  .dir-table td { padding: 0.8rem 0.85rem; vertical-align: top; font-size: 0.88rem; }
-  .dtd-num   { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); text-align: center; vertical-align: middle; }
-  .dtd-team  { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; color: var(--gold); letter-spacing: 1.5px; vertical-align: middle; white-space: nowrap; }
-  .dir-comm-badge { display:inline-block; background:var(--gold); color:var(--bg); font-family:'DM Mono',monospace; font-size:0.52rem; padding:0.1rem 0.35rem; letter-spacing:1px; vertical-align:middle; margin-left:0.4rem; font-weight:700; }
-  .dtd-owner { font-weight: 600; color: var(--text); white-space: nowrap; vertical-align: middle; }
-  .dtd-phone { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); white-space: nowrap; vertical-align: middle; }
-  .dtd-email { vertical-align: middle; }
-  .dtd-email a { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--blue); text-decoration: none; display: block; }
-  .dtd-email a:hover { text-decoration: underline; color: #70c0ff; }
-  .dtd-gm-name { font-size: 0.88rem; font-weight: 600; color: var(--green); display: block; white-space: nowrap; }
-  .dtd-gm-name + .dtd-gm-name { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
-  .dtd-gm-email { vertical-align: top; }
-  .dtd-gm-email a { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--blue); text-decoration: none; display: block; }
-  .dtd-gm-email a:hover { text-decoration: underline; color: #70c0ff; }
-  .gm-email-group + .gm-email-group { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
-  .dir-dash { color: var(--border); font-family: 'DM Mono', monospace; font-size: 0.72rem; }
-  .dir-no-results { text-align:center; color:var(--muted); font-family:'DM Mono',monospace; padding:3rem; font-size:0.85rem; letter-spacing:1px; display:none; }
+  /* DIRECTORY */
+  .dir-ticker { background:var(--gold); color:var(--bg); padding:0.4rem 0; overflow:hidden; white-space:nowrap; font-family:'DM Mono',monospace; font-size:0.75rem; font-weight:500; letter-spacing:1px; }
+  .dir-ticker-inner { display:inline-block; animation:scroll 40s linear infinite; }
+  @keyframes scroll { from{transform:translateX(100vw);} to{transform:translateX(-100%);} }
+  .dir-header { border-bottom:2px solid var(--gold); padding:1.25rem 2rem; display:flex; align-items:center; justify-content:space-between; background:var(--bg); flex-wrap:wrap; gap:0.75rem; }
+  .dir-logo { display:flex; align-items:baseline; gap:0.6rem; }
+  .dir-logo-main { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--gold); letter-spacing:4px; line-height:1; }
+  .dir-logo-sub  { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
+  .dir-header-stats { display:flex; gap:1.5rem; font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+  .dir-header-stats span { color:var(--gold); font-size:1rem; display:block; }
+  .dir-toolbar { padding:1rem 2rem; background:var(--surface); border-bottom:1px solid var(--border); display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+  .dir-search { flex:1; min-width:220px; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:0.6rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.2s; }
+  .dir-search:focus { border-color:var(--gold); }
+  .dir-search::placeholder { color:var(--muted); }
+  .dir-count { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); white-space:nowrap; }
+  .dir-count strong { color:var(--gold); }
+  .dir-table-wrap { padding:1.5rem 2rem; overflow-x:auto; }
+  .dir-table { width:100%; border-collapse:collapse; min-width:1200px; }
+  .dir-table thead tr { background:var(--surface2); border-bottom:2px solid var(--gold); }
+  .dir-table th { padding:0.65rem 0.85rem; text-align:left; font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; font-weight:500; white-space:nowrap; }
+  .dth-num{color:var(--muted);width:32px;} .dth-team{color:var(--gold);} .dth-owner{color:var(--gold);} .dth-phone{color:var(--gold);} .dth-email{color:var(--blue);} .dth-gm{color:var(--green);} .dth-gme{color:var(--blue);}
+  .dir-table tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
+  .dir-table tbody tr:hover { background:var(--surface); }
+  .dir-table tbody tr.comm-row { border-left:3px solid var(--red); }
+  .dir-table td { padding:0.8rem 0.85rem; vertical-align:top; font-size:0.88rem; }
+  .dtd-num{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted);text-align:center;vertical-align:middle;}
+  .dtd-team{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold);letter-spacing:1.5px;vertical-align:middle;white-space:nowrap;}
+  .dir-comm-badge{display:inline-block;background:var(--gold);color:var(--bg);font-family:'DM Mono',monospace;font-size:0.52rem;padding:0.1rem 0.35rem;letter-spacing:1px;vertical-align:middle;margin-left:0.4rem;font-weight:700;}
+  .dtd-owner{font-weight:600;color:var(--text);white-space:nowrap;vertical-align:middle;}
+  .dtd-phone{font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--muted);white-space:nowrap;vertical-align:middle;}
+  .dtd-email{vertical-align:middle;}
+  .dtd-email a{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--blue);text-decoration:none;display:block;}
+  .dtd-email a:hover{text-decoration:underline;color:#70c0ff;}
+  .dtd-gm-name{font-size:0.88rem;font-weight:600;color:var(--green);display:block;white-space:nowrap;}
+  .dtd-gm-name+.dtd-gm-name{margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);}
+  .dtd-gm-email{vertical-align:top;}
+  .dtd-gm-email a{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--blue);text-decoration:none;display:block;}
+  .dtd-gm-email a:hover{text-decoration:underline;color:#70c0ff;}
+  .gm-email-group+.gm-email-group{margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);}
+  .dir-dash{color:var(--border);font-family:'DM Mono',monospace;font-size:0.72rem;}
+  .dir-no-results{text-align:center;color:var(--muted);font-family:'DM Mono',monospace;padding:3rem;font-size:0.85rem;letter-spacing:1px;display:none;}
 </style>
 </head>
 <body>
 
 <div class="confetti-wrap" id="confetti"></div>
 
+<!-- STATUS OVERLAY -->
+<div class="status-overlay hidden" id="status-overlay">
+  <div class="status-spinner" id="status-spinner"></div>
+  <div class="status-msg" id="status-msg">LOADING…</div>
+  <div class="status-err hidden" id="status-err"></div>
+</div>
+
 <!-- ══════════════════════════════════════════════════════
      PAGE 1: DRAFT RANDOMIZER
 ══════════════════════════════════════════════════════ -->
 <div class="page active" id="page-randomizer">
-
   <div class="header">
     <div class="title-main">BADBALL DRAFT RANDOMIZER</div>
     <div class="title-sub">Badball 2026 · Lightning Rounds · Bench Snake Draft</div>
   </div>
-
   <div class="progress-banner">
     <div class="prog-text"><strong id="prog-count">0</strong> / 14 teams completed</div>
     <div class="prog-bar-wrap"><div class="prog-bar-fill" id="prog-bar"></div></div>
     <button class="reset-btn" onclick="resetAll()">↺ Reset All Picks</button>
   </div>
-
   <div class="main">
     <div class="instructions">
       <strong>HOW TO USE:</strong> Each team click just the two buttons under your team's name to randomly generate your team's draft order (1–14) for the
@@ -355,7 +171,6 @@
       <button class="nav-btn" onclick="showPage('directory')">📋 View Team Directory — Phones &amp; Emails</button>
       <br><br>Thanks, <strong>Ed</strong>
     </div>
-
     <table class="team-table">
       <thead>
         <tr>
@@ -368,7 +183,6 @@
       </thead>
       <tbody id="team-tbody"></tbody>
     </table>
-
     <div class="summary-panel" id="summary-panel">
       <div class="summary-title">🏆 ALL PICKS REVEALED</div>
       <div class="summary-sub">Complete draft order — Badball Senior League 2026</div>
@@ -384,7 +198,6 @@
      PAGE 2: TEAM DIRECTORY
 ══════════════════════════════════════════════════════ -->
 <div class="page" id="page-directory">
-
   <div class="dir-ticker">
     <div class="dir-ticker-inner">
       ⚾ BADBALL SENIOR LEAGUE 2026 — TEAM DIRECTORY &nbsp;|&nbsp;
@@ -393,7 +206,6 @@
       Norcal &nbsp;·&nbsp; Jam &nbsp;·&nbsp; Rocketman &nbsp;·&nbsp; Rye Wranglers &nbsp;|&nbsp; ⚾ PLAY BALL 2026
     </div>
   </div>
-
   <div class="dir-header">
     <div class="dir-logo">
       <div class="dir-logo-main">BADBALL</div>
@@ -404,13 +216,11 @@
       <div>Season<br><span>2026</span></div>
     </div>
   </div>
-
   <div class="dir-toolbar">
     <input class="dir-search" type="text" id="dir-search" placeholder="Search team, owner, GM, phone or email…" oninput="filterDirectory()">
     <div class="dir-count">Showing <strong id="dir-show-count">14</strong> of 14 teams</div>
     <button class="nav-btn gold-nav" onclick="showPage('randomizer')">🎲 Go to Draft Randomizer</button>
   </div>
-
   <div class="dir-table-wrap">
     <table class="dir-table">
       <thead>
@@ -432,12 +242,20 @@
 
 <script>
 // ══════════════════════════════════════════════════════
+// JSONBIN CONFIG
+// ══════════════════════════════════════════════════════
+const BIN_ID    = '69988e94ae596e708f3a94b5';
+const SECRET    = '$2a$10$04Q/wsx2Sx5pSVF3MyyAV.LlLKl/RFIlSPrTQrNkDYDtygpVAU1KO';
+const BIN_URL   = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const HEADERS   = { 'Content-Type':'application/json', 'X-Master-Key': SECRET, 'X-Bin-Versioning': 'false' };
+
+// ══════════════════════════════════════════════════════
 // PAGE SWITCHER
 // ══════════════════════════════════════════════════════
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
   if (name === 'directory') {
     renderDirectory(DIR_TEAMS);
     document.getElementById('dir-search').value = '';
@@ -446,10 +264,50 @@ function showPage(name) {
 }
 
 // ══════════════════════════════════════════════════════
-// RANDOMIZER DATA & LOGIC
+// STATUS UI
+// ══════════════════════════════════════════════════════
+function showStatus(msg) {
+  document.getElementById('status-overlay').classList.remove('hidden');
+  document.getElementById('status-spinner').style.display = 'block';
+  document.getElementById('status-msg').textContent = msg;
+  document.getElementById('status-err').classList.add('hidden');
+}
+function hideStatus() {
+  document.getElementById('status-overlay').classList.add('hidden');
+}
+function showError(msg) {
+  document.getElementById('status-spinner').style.display = 'none';
+  document.getElementById('status-msg').textContent = 'SOMETHING WENT WRONG';
+  const errEl = document.getElementById('status-err');
+  errEl.textContent = msg + '\n\nPlease try again or contact Ed Wolfe.';
+  errEl.classList.remove('hidden');
+  setTimeout(hideStatus, 6000);
+}
+
+// ══════════════════════════════════════════════════════
+// JSONBIN READ / WRITE
+// ══════════════════════════════════════════════════════
+async function readBin() {
+  const res = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': SECRET } });
+  if (!res.ok) throw new Error('Could not read from database');
+  const json = await res.json();
+  return json.record;
+}
+
+async function writeBin(data) {
+  const res = await fetch(BIN_URL, {
+    method: 'PUT',
+    headers: HEADERS,
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error('Could not save to database');
+  return res.json();
+}
+
+// ══════════════════════════════════════════════════════
+// TEAM DATA
 // ══════════════════════════════════════════════════════
 const ADMIN = 'ewolfe@wolferesearch.com';
-
 const TEAMS = [
   { id:1,  name:"Dos Reyes de los Perros Locos", owner:"Jeff Downey",      coowners:["Michael Downey"],                email:"jeffkdowney@gmail.com",           emails:["jeffkdowney@gmail.com"],                                                      comm:false },
   { id:2,  name:"Negative Carey",                owner:"Matt Carey",        coowners:[],                                email:"mattheca@icloud.com",             emails:["mattheca@icloud.com"],                                                        comm:false },
@@ -466,37 +324,40 @@ const TEAMS = [
   { id:13, name:"Rocketman",                      owner:"John Spinello SR",  coowners:[],                                email:"johnspinello@yahoo.com",          emails:["johnspinello@yahoo.com"],                                                     comm:false },
   { id:14, name:"Rye Wranglers",                  owner:"Ed Wolfe",          coowners:["Kole Wolfe"],                    email:"ewolfe@wolferesearch.com",         emails:["ewolfe@wolferesearch.com","kole.m.wolfe@gmail.com"],                          comm:true  },
 ];
-
 const ALL_EMAILS = [...new Set(TEAMS.flatMap(t => t.emails).concat([ADMIN]))].join(',');
 
-function range(a,b) { const r=[]; for(let i=a;i<=b;i++) r.push(i); return r; }
-function shuffle(arr) {
-  const a=[...arr];
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
+// ══════════════════════════════════════════════════════
+// INIT — load current state from JSONBin
+// ══════════════════════════════════════════════════════
+let STATE = null; // live state from JSONBin
+
+async function init() {
+  showStatus('LOADING DRAFT DATA…');
+  try {
+    STATE = await readBin();
+    renderTable();
+    hideStatus();
+  } catch(e) {
+    showError('Could not connect to the draft database. Check your internet connection.');
   }
-  return a;
 }
 
-let pool8     = shuffle(range(1,14));
-let poolSnake = shuffle(range(1,14));
-let idx8 = 0, idxSnake = 0;
-const picks = {};
-TEAMS.forEach(t => picks[t.id] = { p8:null, p3:null, snake:null, done8:false, doneSnake:false });
-
+// ══════════════════════════════════════════════════════
+// RENDER TABLE
+// ══════════════════════════════════════════════════════
 function renderTable() {
+  if (!STATE) return;
   const tbody = document.getElementById('team-tbody');
   tbody.innerHTML = TEAMS.map(t => {
-    const p = picks[t.id];
-    const allDone = p.done8 && p.doneSnake;
-    const b8     = p.p8    ? `<div class="pick-badge show-gold">${p.p8}</div>`    : `<div class="pick-badge">—</div>`;
-    const b3     = p.p3    ? `<div class="pick-badge show-blue">${p.p3}</div>`    : `<div class="pick-badge">—</div>`;
-    const bSnake = p.snake ? `<div class="pick-badge show-green">${p.snake}</div>` : `<div class="pick-badge">—</div>`;
-    const btn8 = p.done8
+    const p = STATE.picks[t.id] || {};
+    const allDone = p.p8 != null && p.snake != null;
+    const b8     = p.p8    != null ? `<div class="pick-badge show-gold">${p.p8}</div>`    : `<div class="pick-badge">—</div>`;
+    const b3     = p.p3    != null ? `<div class="pick-badge show-blue">${p.p3}</div>`    : `<div class="pick-badge">—</div>`;
+    const bSnake = p.snake != null ? `<div class="pick-badge show-green">${p.snake}</div>` : `<div class="pick-badge">—</div>`;
+    const btn8 = p.p8 != null
       ? `<span class="done-label">✓ $8 SET</span>`
       : `<button class="pick-btn gold-btn" onclick="reveal8(${t.id})">💰 $8 PICK</button>`;
-    const btnSnake = p.doneSnake
+    const btnSnake = p.snake != null
       ? `<span class="done-label">✓ RESERVE SET</span>`
       : `<button class="pick-btn green-btn" onclick="revealSnake(${t.id})">🐍 RESERVE ROUND SEED</button>`;
     return `
@@ -512,74 +373,115 @@ function renderTable() {
         <td class="act-cell"><div class="btn-pair">${btn8}${btnSnake}</div></td>
       </tr>`;
   }).join('');
-  const done = TEAMS.filter(t => picks[t.id].done8 && picks[t.id].doneSnake).length;
+  const done = TEAMS.filter(t => (STATE.picks[t.id]||{}).p8 != null && (STATE.picks[t.id]||{}).snake != null).length;
   document.getElementById('prog-count').textContent = done;
   document.getElementById('prog-bar').style.width = `${(done/14)*100}%`;
   if (done === 14) showSummary();
 }
 
-function reveal8(id) {
-  if (idx8 >= 14) return;
-  const p = picks[id];
-  if (p.done8) return;
-  p.p8 = pool8[idx8++];
-  p.p3 = 15 - p.p8;
-  p.done8 = true;
-  renderTable();
-  spawnConfetti(p.p8 <= 3 ? 25 : 8);
-  const t = TEAMS.find(x => x.id === id);
-  const revealed = TEAMS.filter(x => picks[x.id].done8);
-  const sorted   = [...revealed].sort((a,b) => picks[a.id].p8 - picks[b.id].p8);
-  let body = [
-    `BADBALL SENIOR LEAGUE 2026 — $8 & $3 LIGHTNING ROUND`,``,
-    `${t.name} (${t.owner}) just revealed their picks:`,
-    `  💰 $8 Lightning Round (Round 8):   Pick #${p.p8}`,
-    `  💵 $3 Lightning Round (Round 13):  Pick #${p.p3}  (inverse of $8)`,``,
-    `────────────────────────────────────────`,
-    `PICKS REVEALED SO FAR (${revealed.length} of 14):`,
-    `────────────────────────────────────────`,
-    ...sorted.map(x => `  $8 Pick #${String(picks[x.id].p8).padStart(2)} → $3 Pick #${String(picks[x.id].p3).padStart(2)}  |  ${x.name} (${x.owner})`),``,
-    `— Ed Wolfe, Commissioner · Badball Senior League 2026`
-  ].join('\n');
-  mailto(ALL_EMAILS, `Badball 2026 · ${t.name} — $8 Pick #${p.p8} / $3 Pick #${p.p3}`, body);
+// ══════════════════════════════════════════════════════
+// REVEAL $8 PICK — pulls from central pool
+// ══════════════════════════════════════════════════════
+async function reveal8(id) {
+  if (!STATE) return;
+  if ((STATE.picks[id]||{}).p8 != null) return;
+  if (STATE.pool8.length === 0) { alert('All $8 picks have been assigned!'); return; }
+  showStatus('ASSIGNING YOUR $8 PICK…');
+  try {
+    STATE = await readBin();
+    if ((STATE.picks[id]||{}).p8 != null) { hideStatus(); renderTable(); return; }
+    if (STATE.pool8.length === 0) { hideStatus(); return; }
+    const pick8 = STATE.pool8[0];
+    const pick3 = 15 - pick8;
+    STATE.pool8 = STATE.pool8.slice(1);
+    if (!STATE.picks[id]) STATE.picks[id] = {};
+    STATE.picks[id].p8 = pick8;
+    STATE.picks[id].p3 = pick3;
+    await writeBin(STATE);
+    hideStatus();
+    renderTable();
+    spawnConfetti(pick8 <= 3 ? 25 : 8);
+    // Send combined email only when BOTH picks are done
+    if (STATE.picks[id].snake != null) sendTeamEmail(id);
+  } catch(e) {
+    showError('Failed to save your $8 pick. Please try again.');
+  }
 }
 
-function revealSnake(id) {
-  if (idxSnake >= 14) return;
-  const p = picks[id];
-  if (p.doneSnake) return;
-  p.snake = poolSnake[idxSnake++];
-  p.doneSnake = true;
-  renderTable();
-  spawnConfetti(p.snake <= 3 ? 25 : 8);
+// ══════════════════════════════════════════════════════
+// REVEAL SNAKE PICK — pulls from central pool
+// ══════════════════════════════════════════════════════
+async function revealSnake(id) {
+  if (!STATE) return;
+  if ((STATE.picks[id]||{}).snake != null) return;
+  if (STATE.poolSnake.length === 0) { alert('All Reserve Round seeds have been assigned!'); return; }
+  showStatus('ASSIGNING YOUR RESERVE ROUND SEED…');
+  try {
+    STATE = await readBin();
+    if ((STATE.picks[id]||{}).snake != null) { hideStatus(); renderTable(); return; }
+    if (STATE.poolSnake.length === 0) { hideStatus(); return; }
+    const snake = STATE.poolSnake[0];
+    STATE.poolSnake = STATE.poolSnake.slice(1);
+    if (!STATE.picks[id]) STATE.picks[id] = {};
+    STATE.picks[id].snake = snake;
+    await writeBin(STATE);
+    hideStatus();
+    renderTable();
+    spawnConfetti(snake <= 3 ? 25 : 8);
+    // Send combined email only when BOTH picks are done
+    if (STATE.picks[id].p8 != null) sendTeamEmail(id);
+  } catch(e) {
+    showError('Failed to save your Reserve Round seed. Please try again.');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// TEAM ANNOUNCEMENT EMAIL — fires only when both picks done
+// ══════════════════════════════════════════════════════
+function sendTeamEmail(id) {
   const t = TEAMS.find(x => x.id === id);
-  const revealed = TEAMS.filter(x => picks[x.id].doneSnake);
-  const sorted   = [...revealed].sort((a,b) => picks[a.id].snake - picks[b.id].snake);
-  const roundLines = range(1,6).map(r => {
+  const p = STATE.picks[id];
+  const roundLines = [1,2,3,4,5,6].map(r => {
     const fwd = r%2===1;
-    const pos = fwd ? p.snake : (15 - p.snake);
-    return `    Round ${r} (${fwd?'1→14':'14→1'}): Pick #${pos}`;
+    return `    Round ${r} (${fwd?'1\u219214':'14\u21921'}): Pick #${fwd ? p.snake : 15-p.snake}`;
   });
-  let body = [
-    `BADBALL SENIOR LEAGUE 2026 — BENCH SNAKE DRAFT`,``,
-    `${t.name} (${t.owner}) just revealed their Reserve Round seed:`,
-    `  🐍 Reserve Round Seed:  #${p.snake}`,``,
-    `  Your 6-Round Bench Snake picks:`,
+  const doneSoFar = TEAMS.filter(x => (STATE.picks[x.id]||{}).p8 != null && (STATE.picks[x.id]||{}).snake != null).length;
+  const statusLines = TEAMS.map(x => {
+    const xp = STATE.picks[x.id]||{};
+    const status = (xp.p8 != null && xp.snake != null)
+      ? `$8:#${String(xp.p8).padStart(2)}  $3:#${String(xp.p3).padStart(2)}  Snake:#${String(xp.snake).padStart(2)}`
+      : `(pending)`;
+    return `  ${x.name.padEnd(40)} ${status}`;
+  });
+  const body = [
+    `BADBALL SENIOR LEAGUE 2026 — DRAFT PICKS ASSIGNED`,``,
+    `${t.name} (${t.owner}) has been randomly assigned the following draft slots:`,``,
+    `  💰  $8 Lightning Round  (Round 8):   Pick #${p.p8}`,
+    `  💵  $3 Lightning Round  (Round 13):  Pick #${p.p3}  (inverse of $8 pick)`,
+    `  🐍  Reserve Round Seed  (Snake):     Seed #${p.snake}`,``,
+    `  Reserve Round Snake picks by round:`,
     ...roundLines,``,
-    `────────────────────────────────────────`,
-    `SEEDS REVEALED SO FAR (${revealed.length} of 14):`,
-    `────────────────────────────────────────`,
-    ...sorted.map(x => `  Seed #${String(picks[x.id].snake).padStart(2)}  |  ${x.name} (${x.owner})`),``,
+    `════════════════════════════════════════`,
+    `TEAMS COMPLETED: ${doneSoFar} of 14`,
+    `════════════════════════════════════════`,
+    ...statusLines,``,
     `— Ed Wolfe, Commissioner · Badball Senior League 2026`
   ].join('\n');
-  mailto(ALL_EMAILS, `Badball 2026 · ${t.name} — Reserve Round Seed #${p.snake}`, body);
+  mailto(
+    ALL_EMAILS,
+    `Badball 2026 · ${t.name} — Picks Assigned ($8 #${p.p8} · $3 #${p.p3} · Snake #${p.snake})`,
+    body
+  );
 }
 
+// ══════════════════════════════════════════════════════
+// SUMMARY
+// ══════════════════════════════════════════════════════
 function showSummary() {
   spawnConfetti(60);
   document.getElementById('summary-panel').classList.add('visible');
-  const by8     = [...TEAMS].sort((a,b) => picks[a.id].p8    - picks[b.id].p8);
-  const bySnake = [...TEAMS].sort((a,b) => picks[a.id].snake - picks[b.id].snake);
+  const by8     = [...TEAMS].sort((a,b) => STATE.picks[a.id].p8    - STATE.picks[b.id].p8);
+  const bySnake = [...TEAMS].sort((a,b) => STATE.picks[a.id].snake - STATE.picks[b.id].snake);
   let html = `
     <table class="team-table" style="margin-bottom:1.5rem">
       <thead><tr>
@@ -590,9 +492,9 @@ function showSummary() {
         ${by8.map(t=>`<tr>
           <td class="td-num">${t.id}</td>
           <td><div class="td-name">${t.name}</div><div class="td-owner">${t.owner}</div></td>
-          <td class="pick-cell"><div class="pick-badge show-gold">${picks[t.id].p8}</div></td>
-          <td class="pick-cell"><div class="pick-badge show-blue">${picks[t.id].p3}</div></td>
-          <td class="pick-cell"><div class="pick-badge show-green">${picks[t.id].snake}</div></td>
+          <td class="pick-cell"><div class="pick-badge show-gold">${STATE.picks[t.id].p8}</div></td>
+          <td class="pick-cell"><div class="pick-badge show-blue">${STATE.picks[t.id].p3}</div></td>
+          <td class="pick-cell"><div class="pick-badge show-green">${STATE.picks[t.id].snake}</div></td>
         </tr>`).join('')}
       </tbody>
     </table>
@@ -612,21 +514,22 @@ function showSummary() {
 }
 
 function sendSummaryEmail() {
-  const by8     = [...TEAMS].sort((a,b) => picks[a.id].p8    - picks[b.id].p8);
-  const by3     = [...TEAMS].sort((a,b) => picks[a.id].p3    - picks[b.id].p3);
-  const bySnake = [...TEAMS].sort((a,b) => picks[a.id].snake - picks[b.id].snake);
+  const by8     = [...TEAMS].sort((a,b) => STATE.picks[a.id].p8    - STATE.picks[b.id].p8);
+  const by3     = [...TEAMS].sort((a,b) => STATE.picks[a.id].p3    - STATE.picks[b.id].p3);
+  const bySnake = [...TEAMS].sort((a,b) => STATE.picks[a.id].snake - STATE.picks[b.id].snake);
   let lines = [
-    `BADBALL SENIOR LEAGUE 2026 — COMPLETE DRAFT ORDER`,``,
+    `BADBALL SENIOR LEAGUE 2026 — COMPLETE DRAFT ORDER`,
+    `Generated automatically once all 14 teams submitted their picks.`,``,
     `════════════════════════════════════════`,
     `💰 $8 LIGHTNING ROUND ORDER (Round 8)`,
     `════════════════════════════════════════`,
-    ...by8.map(t=>`  Pick #${String(picks[t.id].p8).padStart(2)}  |  ${t.name} (${t.owner})`),``,
+    ...by8.map(t=>`  Pick #${String(STATE.picks[t.id].p8).padStart(2)}   |  ${t.name} (${t.owner})`),``,
     `════════════════════════════════════════`,
     `💵 $3 LIGHTNING ROUND ORDER (Round 13)`,
     `════════════════════════════════════════`,
-    ...by3.map(t=>`  Pick #${String(picks[t.id].p3).padStart(2)}  |  ${t.name} (${t.owner})  [was $8 Pick #${picks[t.id].p8}]`),``,
+    ...by3.map(t=>`  Pick #${String(STATE.picks[t.id].p3).padStart(2)}   |  ${t.name} (${t.owner})`),``,
     `════════════════════════════════════════`,
-    `🐍 BENCH SNAKE DRAFT — ALL 6 ROUNDS`,
+    `🐍 RESERVE ROUND SNAKE DRAFT — ALL 6 ROUNDS`,
     `════════════════════════════════════════`,
   ];
   let gp=1;
@@ -634,21 +537,42 @@ function sendSummaryEmail() {
     const fwd=r%2===1;
     const order=fwd?[...bySnake]:[...bySnake].reverse();
     lines.push(``,`  ROUND ${r} (${fwd?'Picks 1→14':'Picks 14→1'})`);
-    order.forEach((t,i)=>lines.push(`    Overall Pick #${String(gp++).padStart(2)} [R${r}·P${i+1}]  ${t.name} (${t.owner})`));
+    order.forEach((t,i)=>lines.push(`    Pick #${String(gp++).padStart(2)}   |  ${t.name} (${t.owner})`));
   }
   lines.push(``,`════════════════════════════════════════`,``,`Good luck everyone!`,`— Ed Wolfe, Commissioner · Badball Senior League 2026`);
   mailto(ALL_EMAILS, `Badball 2026 — COMPLETE DRAFT ORDER (All Rounds)`, lines.join('\n'));
 }
 
-function resetAll() {
-  if (!confirm('Reset ALL picks? This cannot be undone.')) return;
-  pool8=shuffle(range(1,14)); poolSnake=shuffle(range(1,14));
-  idx8=0; idxSnake=0;
-  TEAMS.forEach(t => picks[t.id] = { p8:null, p3:null, snake:null, done8:false, doneSnake:false });
-  document.getElementById('summary-panel').classList.remove('visible');
-  renderTable();
+// ══════════════════════════════════════════════════════
+// RESET — commissioner only
+// ══════════════════════════════════════════════════════
+async function resetAll() {
+  if (!confirm('Reset ALL picks? This will clear every team\'s picks and cannot be undone.')) return;
+  showStatus('RESETTING…');
+  try {
+    function shuffle(arr) {
+      const a=[...arr];
+      for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+      return a;
+    }
+    const fresh = {
+      pool8:     shuffle([1,2,3,4,5,6,7,8,9,10,11,12,13,14]),
+      poolSnake: shuffle([1,2,3,4,5,6,7,8,9,10,11,12,13,14]),
+      picks: {}
+    };
+    await writeBin(fresh);
+    STATE = fresh;
+    document.getElementById('summary-panel').classList.remove('visible');
+    renderTable();
+    hideStatus();
+  } catch(e) {
+    showError('Reset failed. Please try again.');
+  }
 }
 
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
 function mailto(to, subject, body) {
   window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
@@ -687,26 +611,24 @@ const DIR_TEAMS = [
 ];
 
 function renderDirectory(list) {
-  const tbody = document.getElementById('dir-tbody');
-  const noRes = document.getElementById('dir-no-results');
-  document.getElementById('dir-show-count').textContent = list.length;
-  if (list.length === 0) { tbody.innerHTML=''; noRes.style.display='block'; return; }
-  noRes.style.display = 'none';
-  tbody.innerHTML = list.map(t => {
-    let gmNamesHtml = `<span class="dir-dash">—</span>`;
-    if (t.gms.length) {
-      gmNamesHtml = t.gms.map(gm => `<span class="dtd-gm-name">${gm.name}</span>`).join('');
-    }
-    let gmEmailsHtml = `<span class="dir-dash">—</span>`;
-    if (t.gms.length && t.gms.some(gm => gm.email1)) {
-      gmEmailsHtml = t.gms.map(gm => {
-        let inner = gm.email1 ? `<a href="mailto:${gm.email1}">${gm.email1}</a>` : `<span class="dir-dash">—</span>`;
+  const tbody=document.getElementById('dir-tbody');
+  const noRes=document.getElementById('dir-no-results');
+  document.getElementById('dir-show-count').textContent=list.length;
+  if(list.length===0){tbody.innerHTML='';noRes.style.display='block';return;}
+  noRes.style.display='none';
+  tbody.innerHTML=list.map(t=>{
+    let gmNamesHtml=`<span class="dir-dash">—</span>`;
+    if(t.gms.length) gmNamesHtml=t.gms.map(gm=>`<span class="dtd-gm-name">${gm.name}</span>`).join('');
+    let gmEmailsHtml=`<span class="dir-dash">—</span>`;
+    if(t.gms.length&&t.gms.some(gm=>gm.email1)){
+      gmEmailsHtml=t.gms.map(gm=>{
+        const inner=gm.email1?`<a href="mailto:${gm.email1}">${gm.email1}</a>`:`<span class="dir-dash">—</span>`;
         return `<div class="gm-email-group">${inner}</div>`;
       }).join('');
     }
-    return `<tr class="${t.comm ? 'comm-row' : ''}">
+    return `<tr class="${t.comm?'comm-row':''}">
       <td class="dtd-num">${t.id}</td>
-      <td class="dtd-team">${t.team}${t.comm ? '<span class="dir-comm-badge">⭐ COMM</span>' : ''}</td>
+      <td class="dtd-team">${t.team}${t.comm?'<span class="dir-comm-badge">⭐ COMM</span>':''}</td>
       <td class="dtd-owner">${t.firstName} ${t.lastName}</td>
       <td class="dtd-phone">${t.phone}</td>
       <td class="dtd-email"><a href="mailto:${t.ownerEmail}">${t.ownerEmail}</a></td>
@@ -717,21 +639,19 @@ function renderDirectory(list) {
 }
 
 function filterDirectory() {
-  const q = document.getElementById('dir-search').value.toLowerCase().trim();
-  if (!q) { renderDirectory(DIR_TEAMS); return; }
-  renderDirectory(DIR_TEAMS.filter(t =>
-    t.team.toLowerCase().includes(q) ||
-    t.firstName.toLowerCase().includes(q) ||
-    t.lastName.toLowerCase().includes(q) ||
-    t.phone.includes(q) ||
-    t.ownerEmail.toLowerCase().includes(q) ||
-    t.gms.some(gm => gm.name.toLowerCase().includes(q) || (gm.email1 && gm.email1.toLowerCase().includes(q)))
+  const q=document.getElementById('dir-search').value.toLowerCase().trim();
+  if(!q){renderDirectory(DIR_TEAMS);return;}
+  renderDirectory(DIR_TEAMS.filter(t=>
+    t.team.toLowerCase().includes(q)||t.firstName.toLowerCase().includes(q)||
+    t.lastName.toLowerCase().includes(q)||t.phone.includes(q)||
+    t.ownerEmail.toLowerCase().includes(q)||
+    t.gms.some(gm=>gm.name.toLowerCase().includes(q)||(gm.email1&&gm.email1.toLowerCase().includes(q)))
   ));
 }
 
 // ── INIT ──
-renderTable();
 renderDirectory(DIR_TEAMS);
+init();
 </script>
 </body>
 </html>
