@@ -391,9 +391,10 @@ async function reveal8(id) {
     STATE = await readBin();
     if ((STATE.picks[id]||{}).p8 != null) { hideStatus(); renderTable(); return; }
     if (STATE.pool8.length === 0) { hideStatus(); return; }
-    const pick8 = STATE.pool8[0];
+    const idx8 = Math.floor(Math.random() * STATE.pool8.length);
+    const pick8 = STATE.pool8[idx8];
     const pick3 = 15 - pick8;
-    STATE.pool8 = STATE.pool8.slice(1);
+    STATE.pool8 = STATE.pool8.filter((_,i) => i !== idx8);
     if (!STATE.picks[id]) STATE.picks[id] = {};
     STATE.picks[id].p8 = pick8;
     STATE.picks[id].p3 = pick3;
@@ -420,8 +421,9 @@ async function revealSnake(id) {
     STATE = await readBin();
     if ((STATE.picks[id]||{}).snake != null) { hideStatus(); renderTable(); return; }
     if (STATE.poolSnake.length === 0) { hideStatus(); return; }
-    const snake = STATE.poolSnake[0];
-    STATE.poolSnake = STATE.poolSnake.slice(1);
+    const idxSnake = Math.floor(Math.random() * STATE.poolSnake.length);
+    const snake = STATE.poolSnake[idxSnake];
+    STATE.poolSnake = STATE.poolSnake.filter((_,i) => i !== idxSnake);
     if (!STATE.picks[id]) STATE.picks[id] = {};
     STATE.picks[id].snake = snake;
     await writeBin(STATE);
