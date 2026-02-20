@@ -185,8 +185,7 @@
       <span class="picks-modal-label">🐍 RESERVE ROUND SEED</span>
       <span class="picks-modal-num" id="modal-snake">—</span>
     </div>
-    <div id="modal-countdown" style="text-align:center;font-family:'DM Mono',monospace;font-size:0.8rem;color:#f0c040;margin-top:1.25rem;letter-spacing:1px;"></div>
-    <button class="picks-modal-send" id="modal-send-btn" onclick="doSendEmail()">📧 SEND EMAIL TO ALL 14 TEAMS NOW</button>
+    <button class="picks-modal-send" id="modal-send-btn" onclick="doSendEmail()">📧 SEND EMAIL TO ALL 14 TEAMS</button>
   </div>
 </div>
 
@@ -542,25 +541,9 @@ function sendTeamEmail(id) {
   document.getElementById('modal-p3').textContent    = '#' + p.p3;
   document.getElementById('modal-snake').textContent = '#' + p.snake;
 
-  // Show modal
+  // Show modal — user clicks button when ready
   document.getElementById('picks-modal-overlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
-
-  // Start 5-second countdown
-  let secs = 5;
-  const cd = document.getElementById('modal-countdown');
-  cd.textContent = 'Gmail will open automatically in ' + secs + ' seconds…';
-  countdownTimer = setInterval(function() {
-    secs--;
-    if (secs > 0) {
-      cd.textContent = 'Gmail will open automatically in ' + secs + ' second' + (secs===1?'':'s') + '…';
-    } else {
-      clearInterval(countdownTimer);
-      countdownTimer = null;
-      cd.textContent = 'Opening Gmail now…';
-      doSendEmail();
-    }
-  }, 1000);
 }
 
 function doSendEmail() {
@@ -575,9 +558,7 @@ function doSendEmail() {
 }
 
 function closePicksModal() {
-  if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
   document.getElementById('picks-modal-overlay').style.display = 'none';
-  document.getElementById('modal-countdown').textContent = '';
   document.body.style.overflow = '';
   pendingEmailData = null;
 }
