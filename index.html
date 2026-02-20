@@ -9,8 +9,8 @@
   :root {
     --bg: #080810; --surface: #0f0f1c; --surface2: #16162a;
     --gold: #f0c040; --gold2: #ffda70; --red: #e84040;
-    --blue: #40a0e8; --green: #40e880; --text: #e8e8f5;
-    --muted: #60607a; --border: #22223a;
+    --blue: #40a0e8; --green: #40e880; --text: #ffffff;
+    --muted: #ffffff; --border: #22223a;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
@@ -25,7 +25,7 @@
   /* RANDOMIZER */
   .header { text-align:center; padding:2rem 1rem 1.5rem; border-bottom:1px solid var(--border); background:radial-gradient(ellipse at top,rgba(240,192,64,0.08) 0%,transparent 60%); }
   .title-main { font-family:'Orbitron',monospace; font-weight:900; font-size:clamp(1.6rem,4vw,3rem); color:var(--gold); letter-spacing:6px; text-shadow:0 0 40px rgba(240,192,64,0.5),0 0 80px rgba(240,192,64,0.2); line-height:1; }
-  .title-sub { font-family:'DM Mono',monospace; font-size:0.75rem; color:#fff; letter-spacing:4px; text-transform:uppercase; margin-top:0.5rem; }
+  .title-sub { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--muted); letter-spacing:4px; text-transform:uppercase; margin-top:0.5rem; }
   .progress-banner { background:var(--surface); border-bottom:1px solid var(--border); padding:0.75rem 1.5rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
   .prog-text { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--muted); white-space:nowrap; }
   .prog-text strong { color:var(--gold); font-size:1rem; }
@@ -34,15 +34,19 @@
   .reset-btn { margin-left:auto; background:none; border:1px solid var(--border); color:var(--muted); font-family:'DM Mono',monospace; font-size:0.7rem; padding:0.35rem 0.9rem; cursor:pointer; letter-spacing:1px; text-transform:uppercase; transition:all 0.2s; }
   .reset-btn:hover { border-color:var(--red); color:var(--red); }
   .main { max-width:1100px; margin:0 auto; padding:1.5rem; }
-  .instructions { background:var(--surface2); border:1px solid var(--border); border-left:4px solid var(--gold); padding:1rem 1.25rem; margin-bottom:1.5rem; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:var(--muted); line-height:1.8; }
-  .instructions strong { color:var(--text); }
+  .instructions { background:var(--surface2); border:1px solid var(--border); border-left:4px solid var(--gold); padding:1rem 1.25rem; margin-bottom:1.5rem; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:#ffffff; font-weight:600; line-height:1.8; }
+  .instructions strong { color:#ffffff; font-weight:800; }
   .instructions .blue-text  { color:var(--blue);  font-weight:600; }
   .instructions .gold-text  { color:var(--gold);  font-weight:600; }
   .instructions .green-text { color:var(--green); font-weight:600; }
   .team-table { width:100%; border-collapse:collapse; }
   .team-table thead tr { background:var(--surface2); border-bottom:2px solid var(--gold); }
-  .team-table th { padding:0.65rem 0.75rem; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; font-weight:500; text-align:left; }
-  .th-team{color:var(--text);} .th-8{color:var(--gold);text-align:center;} .th-3{color:var(--blue);text-align:center;} .th-snake{color:var(--green);text-align:center;} .th-act{color:var(--muted);text-align:center;}
+  .team-table th { padding:0.65rem 0.5rem; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; font-weight:500; text-align:left; }
+  .th-team{color:var(--text); width:180px;}
+  .th-8{color:var(--gold);text-align:center;font-size:0.85rem;font-weight:800;letter-spacing:1px;padding:0.65rem 2rem;min-width:140px;}
+  .th-3{color:var(--blue);text-align:center;font-size:0.85rem;font-weight:800;letter-spacing:1px;padding:0.65rem 2rem;min-width:140px;}
+  .th-snake{color:var(--green);text-align:center;font-size:0.85rem;font-weight:800;letter-spacing:1px;padding:0.65rem 2rem;min-width:160px;}
+  .th-act{color:var(--muted);text-align:center;}
   .team-table tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
   .team-table tbody tr:hover { background:rgba(255,255,255,0.02); }
   .team-table tbody tr.done-row { background:rgba(240,192,64,0.03); }
@@ -51,10 +55,10 @@
   .td-name { font-weight:600; font-size:0.9rem; line-height:1.3; }
   .td-owner { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--muted); margin-top:0.15rem; }
   .comm-badge { display:inline-block; background:var(--gold); color:var(--bg); font-size:0.55rem; padding:0.1rem 0.4rem; font-family:'DM Mono',monospace; letter-spacing:1px; vertical-align:middle; margin-left:0.4rem; font-weight:700; }
-  .pick-cell { text-align:center; width:70px; }
+  .pick-cell { text-align:center; width:140px; padding:0.7rem 2rem; }
   .pick-badge { display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; font-family:'Orbitron',monospace; font-weight:700; font-size:1.2rem; border:2px solid var(--border); color:var(--border); background:var(--surface); }
-  .pick-badge.show-gold  { border-color:var(--gold);  color:var(--gold);  background:rgba(240,192,64,0.08);  text-shadow:0 0 10px rgba(240,192,64,0.5);  animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-  .pick-badge.show-blue  { border-color:var(--blue);  color:var(--blue);  background:rgba(64,160,232,0.08);  text-shadow:0 0 10px rgba(64,160,232,0.5);  animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  .pick-badge.show-gold  { border-color:var(--gold);  color:var(--gold);  background:rgba(240,192,64,0.08);  text-shadow:0 0 10px rgba(240,192,64,0.5); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  .pick-badge.show-blue  { border-color:var(--blue);  color:var(--blue);  background:rgba(64,160,232,0.08);  text-shadow:0 0 10px rgba(64,160,232,0.5); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
   .pick-badge.show-green { border-color:var(--green); color:var(--green); background:rgba(64,232,128,0.08); text-shadow:0 0 10px rgba(64,232,128,0.5); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
   @keyframes popIn { 0%{transform:scale(0.2) rotate(-15deg);opacity:0;} 100%{transform:scale(1) rotate(0deg);opacity:1;} }
   .act-cell { text-align:center; width:260px; }
@@ -79,7 +83,7 @@
   .snake-round-label.fwd { background:rgba(64,232,128,0.1); color:var(--green); border-left:3px solid var(--green); }
   .snake-round-label.rev { background:rgba(64,160,232,0.1); color:var(--blue);  border-left:3px solid var(--blue); }
   .snake-picks-row { display:flex; flex-wrap:wrap; gap:0.3rem; }
-  .snake-chip { background:var(--surface2); border:1px solid var(--border); padding:0.3rem 0.6rem; font-family:'DM Mono',monospace; font-size:0.68rem; }
+  .snake-chip { background:var(--surface2); border:1px solid var(--border); padding:0.3rem 0.6rem; font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--text); }
   .chip-num{font-weight:700;} .chip-num.fwd{color:var(--green);} .chip-num.rev{color:var(--blue);}
   .confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:999; overflow:hidden; }
   .confetti-piece { position:absolute; top:-10px; animation:cffall linear forwards; }
@@ -162,22 +166,28 @@
   </div>
   <div class="main">
     <div class="instructions">
-      <strong>HOW TO USE:</strong> Each team click just the two buttons under your team's name to randomly generate your team's draft order (1–14) for the
+      <strong style="color:#e84040;">HOW TO USE:</strong>&nbsp; Each team click just the two buttons under your team's name to randomly generate your team's draft order (1–14) for the
       <span class="gold-text">$8 Lightning Round in Round 8</span> and for the <span class="green-text">Bench Snake Draft</span> after the auction is over.
       Note that your team's <span class="blue-text">$3 Lightning Round in Round 13</span> draft order will automatically be determined as the inverse of your $8 Lightning Round pick.
       Once all 14 teams have hit their 2 buttons and randomly been awarded a draft slot for Round 8, Round 13 and Bench Snake rounds,
       <strong>An Excel file with everyone's draft order will automatically be generated, once all 14 teams have clicked on their random draft buttons.</strong>
       <br><br>
-      <button class="nav-btn" onclick="showPage('directory')">📋 View Team Directory — Phones &amp; Emails</button>
+      <strong style="color:#e84040;">📧 IMPORTANT — AFTER CLICKING BOTH BUTTONS:</strong> Once you have clicked both your <span class="gold-text">$8 Pick</span> and <span class="green-text">Reserve Round Seed</span> buttons,
+      a Gmail window will automatically open with a pre-filled email to all 14 teams announcing your picks. <strong>Please click Send</strong> so everyone is notified.
+      <br><br>
+      <strong style="color:#e84040;">⚠️ POP-UP BLOCKED?</strong> If your browser blocks the Gmail window, you will see a small <strong>"Pop-up blocked"</strong> message in your browser's address bar.
+      Just click it and select <strong>Allow</strong> — the Gmail window will then open and you can send the email.
+      <br><br>
+      <button class="nav-btn" onclick="showPage('directory')" style="border-color:#40a0e8;color:#40a0e8;font-weight:bold;">📋 View Team Directory — Phones &amp; Emails</button>
       <br><br>Thanks, <strong>Ed</strong>
     </div>
     <table class="team-table">
       <thead>
         <tr>
           <th class="th-team" colspan="2">Team</th>
-          <th class="th-8">💰 $8 Pick<br><span style="font-size:0.55rem;color:var(--muted)">Round 8</span></th>
-          <th class="th-3">💵 $3 Pick<br><span style="font-size:0.55rem;color:var(--muted)">Round 13</span></th>
-          <th class="th-snake">🐍 Reserve Round Seed<br><span style="font-size:0.55rem;color:var(--muted)">Bench Draft</span></th>
+          <th class="th-8">💰 $8 PICK<br><span style="font-size:0.7rem;font-weight:600;">Round 8</span></th>
+          <th class="th-3">💵 $3 PICK<br><span style="font-size:0.7rem;font-weight:600;">Round 13</span></th>
+          <th class="th-snake">🐍 RESERVE ROUND SEED<br><span style="font-size:0.7rem;font-weight:600;">Bench Draft</span></th>
           <th class="th-act">Actions</th>
         </tr>
       </thead>
@@ -549,6 +559,9 @@ function sendSummaryEmail() {
 // RESET — commissioner only
 // ══════════════════════════════════════════════════════
 async function resetAll() {
+  const pwd = prompt('Enter Commissioner password to reset all picks:');
+  if (pwd === null) return;
+  if (pwd !== 'badball') { alert('Incorrect password.'); return; }
   if (!confirm('Reset ALL picks? This will clear every team\'s picks and cannot be undone.')) return;
   showStatus('RESETTING…');
   try {
@@ -576,7 +589,9 @@ async function resetAll() {
 // HELPERS
 // ══════════════════════════════════════════════════════
 function mailto(to, subject, body) {
-  window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // Opens Gmail compose in a new tab — works for everyone regardless of email app
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(gmailUrl, '_blank');
 }
 
 function spawnConfetti(n) {
