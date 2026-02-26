@@ -207,6 +207,7 @@
   <div class="progress-banner">
     <div class="prog-text"><strong id="prog-count">0</strong> / 14 teams completed</div>
     <div class="prog-bar-wrap"><div class="prog-bar-fill" id="prog-bar"></div></div>
+    <button class="reset-btn" onclick="showResultsNow()" style="border-color:var(--green);color:var(--green);margin-right:0.5rem;">📊 View &amp; Export Results</button>
     <button class="reset-btn" onclick="resetAll()">↺ Reset All Picks</button>
   </div>
   <div class="main">
@@ -496,7 +497,6 @@ async function revealSnake(id) {
 // TEAM ANNOUNCEMENT — shows modal with picks, then email
 // ══════════════════════════════════════════════════════
 let pendingEmailData = null;
-let countdownTimer   = null;
 
 function sendTeamEmail(id) {
   const t = TEAMS.find(x => x.id === id);
@@ -569,8 +569,9 @@ function closePicksModal() {
 function showSummary() {
   spawnConfetti(60);
   document.getElementById('summary-panel').classList.add('visible');
-  const by8     = [...TEAMS].sort((a,b) => STATE.picks[a.id].p8    - STATE.picks[b.id].p8);
-  const bySnake = [...TEAMS].sort((a,b) => STATE.picks[a.id].snake - STATE.picks[b.id].snake);
+  const donePicks = TEAMS.filter(t => (STATE.picks[t.id]||{}).p8 != null && (STATE.picks[t.id]||{}).snake != null);
+  const by8     = [...donePicks].sort((a,b) => STATE.picks[a.id].p8    - STATE.picks[b.id].p8);
+  const bySnake = [...donePicks].sort((a,b) => STATE.picks[a.id].snake - STATE.picks[b.id].snake);
   let html = `
     <table class="team-table" style="margin-bottom:1.5rem">
       <thead><tr>
@@ -581,9 +582,9 @@ function showSummary() {
         ${by8.map(t=>`<tr>
           <td class="td-num">${t.id}</td>
           <td><div class="td-name">${t.name}</div><div class="td-owner">${t.owner}</div></td>
-          <td class="pick-cell"><div class="pick-badge show-gold">${STATE.picks[t.id].p8}</div></td>
-          <td class="pick-cell"><div class="pick-badge show-blue">${STATE.picks[t.id].p3}</div></td>
-          <td class="pick-cell"><div class="pick-badge show-green">${STATE.picks[t.id].snake}</div></td>
+          <td class="pick-cell"><div class="pick-badge show-gold">${(STATE.picks[t.id]||{}).p8||'—'}</div></td>
+          <td class="pick-cell"><div class="pick-badge show-blue">${(STATE.picks[t.id]||{}).p3||'—'}</div></td>
+          <td class="pick-cell"><div class="pick-badge show-green">${(STATE.picks[t.id]||{}).snake||'—'}</div></td>
         </tr>`).join('')}
       </tbody>
     </table>
@@ -630,6 +631,82 @@ function sendSummaryEmail() {
   }
   lines.push(``,`════════════════════════════════════════`,``,`Good luck everyone!`,`— Ed Wolfe, Commissioner · Badball Senior League 2026`);
   mailto(ALL_EMAILS, `Badball 2026 — COMPLETE DRAFT ORDER (All Rounds)`, lines.join('\n'));
+}
+
+// ══════════════════════════════════════════════════════
+// SHOW RESULTS NOW (commissioner button)
+// ══════════════════════════════════════════════════════
+function showResultsNow() {
+  if (!STATE) { alert('Still loading data, please wait a moment.'); return; }
+  const done = TEAMS.filter(t => (STATE.picks[t.id]||{}).p8 != null && (STATE.picks[t.id]||{}).snake != null).length;
+  if (done === 0) { alert('No picks have been made yet.'); return; }
+  // Make sure we are on the randomizer page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-randomizer').classList.add('active');
+  // Show summary panel
+  document.getElementById('summary-panel').classList.add('visible');
+  showSummary();
+  setTimeout(function() {
+    document.getElementById('summary-panel').scrollIntoView({behavior:'smooth'});
+  }, 100);
+}
+
+// ══════════════════════════════════════════════════════
+// DOWNLOAD CSV
+// ══════════════════════════════════════════════════════
+function downloadCSV() {
+  const by8     = [...TEAMS].sort((a,b) => STATE.picks[a.id].p8    - STATE.picks[b.id].p8);
+  const by3     = [...TEAMS].sort((a,b) => STATE.picks[a.id].p3    - STATE.picks[b.id].p3);
+  const bySnake = [...TEAMS].sort((a,b) => STATE.picks[a.id].snake - STATE.picks[b.id].snake);
+
+  let rows = [];
+
+  // Header
+  rows.push('BADBALL SENIOR LEAGUE 2026 - COMPLETE DRAFT ORDER');
+  rows.push('');
+
+  // $8 Round
+  rows.push('$8 LIGHTNING ROUND (Round 8)');
+  rows.push('Pick,Team,Owner');
+  by8.forEach(t => rows.push(`${STATE.picks[t.id].p8},"${t.name}","${t.owner}"`));
+  rows.push('');
+
+  // $3 Round
+  rows.push('$3 LIGHTNING ROUND (Round 13)');
+  rows.push('Pick,Team,Owner');
+  by3.forEach(t => rows.push(`${STATE.picks[t.id].p3},"${t.name}","${t.owner}"`));
+  rows.push('');
+
+  // Snake Draft — all 6 rounds
+  rows.push('RESERVE ROUND SNAKE DRAFT - ALL 6 ROUNDS');
+  rows.push('Overall Pick,Round,Pick In Round,Team,Owner');
+  let gp = 1;
+  for (let r=1; r<=6; r++) {
+    const fwd = r%2===1;
+    const order = fwd ? [...bySnake] : [...bySnake].reverse();
+    order.forEach((t,i) => {
+      rows.push(`${gp++},Round ${r} (${fwd?'1-14':'14-1'}),${i+1},"${t.name}","${t.owner}"`);
+    });
+  }
+  rows.push('');
+
+  // All teams summary
+  rows.push('FULL SUMMARY - ALL PICKS');
+  rows.push('Team,Owner,$8 Pick,$3 Pick,Reserve Seed');
+  TEAMS.forEach(t => {
+    const p = STATE.picks[t.id]||{};
+    rows.push(`"${t.name}","${t.owner}",${p.p8||''},${p.p3||''},${p.snake||''}`);
+  });
+
+  const csv = rows.join('
+');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Badball_2026_Draft_Order.csv';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 // ══════════════════════════════════════════════════════
